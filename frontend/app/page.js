@@ -11,6 +11,28 @@ const MEAL_GRADIENTS = {
   Snacks: { from: '#F43F5E', to: '#E11D48' },
 };
 const MEAL_ICONS = { Breakfast: '🌅', Lunch: '☀️', Dinner: '🌙', Snacks: '🍿' };
+const INGREDIENT_EMOJIS = {
+  'avocado': '🥑', 'egg': '🥚', 'eggs': '🥚', 'bread': '🍞', 'toast': '🍞', 'sourdough': '🍞',
+  'chicken': '🍗', 'beef': '🥩', 'pork': '🥓', 'salmon': '🐟', 'shrimp': '🦐', 'tuna': '🐟',
+  'cheese': '🧀', 'yogurt': '🥛', 'milk': '🥛', 'cream': '🥛',
+  'rice': '🍚', 'noodles': '🍜', 'pasta': '🍝', 'noodle': '🍜',
+  'tomato': '🍅', 'tomatoes': '🍅', 'onion': '🧅', 'garlic': '🧄', 'pepper': '🫑', 'peppers': '🫑',
+  'carrot': '🥕', 'lettuce': '🥬', 'spinach': '🥬', 'broccoli': '🥦', 'cucumber': '🥒', 'corn': '🌽',
+  'apple': '🍎', 'banana': '🍌', 'orange': '🍊', 'berry': '🫐', 'berries': '🫐', 'strawberry': '🍓', 'lemon': '🍋',
+  'almond': '🌰', 'walnut': '🌰', 'peanut': '🥜', 'nut': '🌰', 'nuts': '🌰',
+  'oil': '🫒', 'butter': '🧈', 'honey': '🍯', 'sauce': '🫕', 'salsa': '🫕',
+  'oat': '🌾', 'oats': '🌾', 'flour': '🌾', 'sugar': '🍬', 'salt': '🧂',
+  'potato': '🥔', 'potatoes': '🥔', 'mushroom': '🍄',
+  'cilantro': '🌿', 'basil': '🌿', 'parsley': '🌿', 'ginger': '🫚',
+  'lime': '🫒', 'lime': '🍋',
+};
+function getIngredientEmoji(name) {
+  var lower = (name || '').toLowerCase();
+  for (var key in INGREDIENT_EMOJIS) {
+    if (lower.includes(key)) return INGREDIENT_EMOJIS[key];
+  }
+  return '•';
+}
 const SERVICE_EMAIL = 'trill-sheets-access@trill-hmi.iam.gserviceaccount.com';
 const SHOPPING_CATEGORIES = ['Produce', 'Meat & Seafood', 'Dairy & Eggs', 'Grains & Bread', 'Pantry', 'Frozen', 'Bakery', 'Beverages', 'Condiments', 'Snacks', 'Other'];
 
@@ -500,13 +522,14 @@ export default function MealPlannerPage() {
   var recipePicker = showRecipePicker ? (
     <div style={{ position: 'fixed', inset: 0, zIndex: 150, background: 'rgba(11,29,46,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={function(e) { if (e.target === e.currentTarget) { closePicker(); } }}>
       <div style={{ width: '100%', maxWidth: 1160, maxHeight: '92vh', background: '#ffffff', borderRadius: 20, overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 40px rgba(11,29,46,0.18)', margin: '0 1rem' }}>
-        <div style={{ width: 40, height: 4, background: '#D1E3EA', borderRadius: 2, margin: '1rem auto 0', flexShrink: 0 }} />
-        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #E8F4F8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-          <div style={{ display: 'flex', gap: '0.25rem' }}>
-            <button onClick={function() { setPickerTab('recipes'); setSelectedRecipe(null); }} style={{ padding: '0.375rem 0.875rem', borderRadius: 8, fontSize: '0.8rem', fontWeight: 600, border: 'none', cursor: 'pointer', background: pickerTab === 'recipes' ? '#0B1D2E' : 'transparent', color: pickerTab === 'recipes' ? '#ffffff' : '#5A7180' }}>Recipes</button>
-            <button onClick={function() { setPickerTab('quick'); setSelectedRecipe(null); }} style={{ padding: '0.375rem 0.875rem', borderRadius: 8, fontSize: '0.8rem', fontWeight: 600, border: 'none', cursor: 'pointer', background: pickerTab === 'quick' ? '#0B1D2E' : 'transparent', color: pickerTab === 'quick' ? '#ffffff' : '#5A7180' }}>Quick Add</button>
-          </div>
-          <button onClick={closePicker} style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: '#5A7180', padding: '0.25rem', lineHeight: 1 }}>✕</button>
+        {/* Header with back button */}
+        <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #E8F4F8', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+          <button
+            onClick={function() { if (selectedRecipe) { setSelectedRecipe(null); } else { closePicker(); } }}
+            style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#1A8BA5', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', padding: '0.25rem 0' }}
+          >
+            <span style={{ fontSize: '1rem' }}>←</span> Back
+          </button>
         </div>
 
         {pickerTab === 'recipes' && !selectedRecipe && (
@@ -559,7 +582,7 @@ export default function MealPlannerPage() {
               {/* Hero Image */}
               {(selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl) && (
                 <div style={{ position: 'relative' }}>
-                  <img src={selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl} style={{ width: '100%', height: 240, objectFit: 'cover', display: 'block' }} />
+                  <img src={selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl} style={{ width: '100%', height: 240, objectFit: 'cover', display: 'block', borderRadius: 12 }} />
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(11,29,46,0.75))', padding: '3rem 1.25rem 1rem' }}>
                     <p style={{ fontWeight: 700, fontSize: '1.5rem', color: '#ffffff', margin: '0 0 0.75rem', lineHeight: 1.2 }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -590,33 +613,31 @@ export default function MealPlannerPage() {
             </div>
             {/* Right column */}
             <div style={{ flex: '0 0 40%', overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1E2A33', margin: 0 }}>Ingredients</p>
-                <button onClick={handleBackToList} style={{ background: 'none', border: 'none', fontSize: '1rem', cursor: 'pointer', color: '#5A7180' }}>✕</button>
+              <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1E2A33', margin: '0 0 0.625rem' }}>Ingredients</p>
+              {/* Action buttons — at TOP */}
+              <div style={{ display: 'flex', gap: '0.375rem', marginBottom: '0.75rem' }}>
+                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var all2 = {}; entries.forEach(function(e) { all2[e[0].trim()] = true; }); setSelectedIngredients(all2); }} style={{ flex: 1, padding: '0.5rem', background: '#ffffff', color: '#1E2A33', border: '1px solid #D1E3EA', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>+ Add All</button>
+                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var sel = {}; entries.forEach(function(e) { if (selectedIngredients[e[0].trim()]) sel[e[0].trim()] = true; }); Object.keys(sel).length > 0 ? openIngredientsModal(selectedRecipe) : showNotify('Check some ingredients first!'); }} style={{ flex: 1, padding: '0.5rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Add Selected</button>
+                <button onClick={function() { setSelectedIngredients({}); }} style={{ flex: 1, padding: '0.5rem', background: '#ffffff', color: '#5A7180', border: '1px solid #D1E3EA', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Clear Selected</button>
               </div>
               {/* Ingredient rows */}
-              <div style={{ flex: 1, overflowY: 'auto', marginBottom: '0.75rem' }}>
+              <div style={{ flex: 1, overflowY: 'auto' }}>
                 {Object.entries(selectedRecipe.ingredients || {}).map(function(entry, idx) {
                   var ingName = entry[0];
                   var ingAmt = entry[1];
                   var ingKey = ingName.trim();
                   var checked = !!selectedIngredients[ingKey];
-                  return <div key={idx} onClick={function() { setSelectedIngredients(function(prev) { return { ...prev, [ingKey]: !prev[ingKey] }; }); }} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.6rem 0', borderBottom: '1px solid #F7FAFB', cursor: 'pointer' }}>
-                    <div style={{ width: 20, height: 20, borderRadius: '50%', border: '2px solid ' + (checked ? '#10B981' : '#D1E3EA'), background: checked ? '#10B981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>{checked && <span style={{ color: '#fff', fontSize: '0.65rem', fontWeight: 700 }}>✓</span>}</div>
+                  return <div key={idx} onClick={function() { setSelectedIngredients(function(prev) { return { ...prev, [ingKey]: !prev[ingKey] }; }); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0', borderBottom: '1px solid #F7FAFB', cursor: 'pointer' }}>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', border: '2px solid ' + (checked ? '#10B981' : '#D1E3EA'), background: checked ? '#10B981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>{checked && <span style={{ color: '#fff', fontSize: '0.6rem', fontWeight: 700 }}>✓</span>}</div>
+                    <span style={{ fontSize: '0.9rem' }}>{getIngredientEmoji(ingName)}</span>
                     <span style={{ flex: 1, fontSize: '0.85rem', color: checked ? '#5A7180' : '#1E2A33', textDecoration: checked ? 'line-through' : 'none' }}>{ingName}</span>
                     <span style={{ fontSize: '0.8rem', color: '#5A7180', fontWeight: 500, flexShrink: 0 }}>{ingAmt}</span>
                   </div>;
                 })}
               </div>
-              {/* Action buttons */}
-              <div style={{ display: 'flex', gap: '0.375rem', marginBottom: '0.75rem' }}>
-                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var all2 = {}; entries.forEach(function(e) { all2[e[0].trim()] = true; }); setSelectedIngredients(all2); }} style={{ flex: 1, padding: '0.5rem', background: '#ffffff', color: '#1E2A33', border: '1px solid #D1E3EA', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>+ Add All</button>
-                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var sel = {}; entries.forEach(function(e) { if (selectedIngredients[e[0].trim()]) sel[e[0].trim()] = true; }); Object.keys(sel).length > 0 ? openIngredientsModal(selectedRecipe) : showNotify('Check some ingredients first!'); }} style={{ flex: 1, padding: '0.5rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Add Selected</button>
-                <button onClick={function() { setSelectedIngredients({}); }} style={{ flex: 1, padding: '0.5rem', background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Clear Selected</button>
-              </div>
               {/* View Instructions */}
               {selectedRecipe.instructions && Object.keys(selectedRecipe.instructions).length > 0 && (
-                <button onClick={function() { setShowInstructions(true); }} style={{ width: '100%', padding: '0.75rem', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: 10, fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                <button onClick={function() { setShowInstructions(true); }} style={{ width: '100%', padding: '0.75rem', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: 10, fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.75rem', flexShrink: 0 }}>
                   View Instructions <span style={{ fontSize: '1rem' }}>→</span>
                 </button>
               )}
