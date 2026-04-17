@@ -1,0 +1,514 @@
+[
+  {
+    "id": "apple-peanut-butter",
+    "category": "snacks",
+    "imageUrl": "images/recipes/apple-peanut-butter.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Apple Slices with Peanut Butter",
+    "cookTime": "0 min",
+    "prepTime": "5 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "8g",
+    "instructions": {
+      "1": "Wash and slice 1 large apple into wedges.",
+      "2": "Remove the core and seeds.",
+      "3": "Serve with 2 tbsp natural peanut butter for dipping.",
+      "4": "Optionally sprinkle apple slices with a little cinnamon."
+    },
+    "ingredients": {
+      "Apple": "1 large",
+      "Natural peanut butter": "2 tbsp"
+    },
+    "calories": 220,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "hummus-veggies",
+    "category": "snacks",
+    "imageUrl": "images/recipes/hummus-veggies.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Hummus and Veggies",
+    "cookTime": "0 min",
+    "prepTime": "10 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "8g",
+    "instructions": {
+      "1": "Slice 1 cucumber into thick sticks.",
+      "2": "Cut 1 bell pepper into strips.",
+      "3": "Slice 2 medium carrots into sticks.",
+      "4": "Arrange vegetables around a small bowl of hummus.",
+      "5": "Season hummus with a drizzle of olive oil and a sprinkle of paprika."
+    },
+    "ingredients": {
+      "Hummus": "1/4 cup",
+      "Cucumber": "1",
+      "Bell pepper": "1",
+      "Carrots": "2 medium",
+      "Olive oil": "for drizzling",
+      "Paprika": "pinch"
+    },
+    "calories": 180,
+    "cuisine": "Middle Eastern",
+    "servings": 1
+  },
+  {
+    "id": "trail-mix",
+    "category": "snacks",
+    "imageUrl": "images/recipes/trail-mix.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Trail Mix",
+    "cookTime": "0 min",
+    "prepTime": "0 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "10g",
+    "instructions": {
+      "1": "Combine 1/4 cup almonds, 1/4 cup cashews, 1/4 cup walnuts in a bowl.",
+      "2": "Add 1/4 cup raisins and 1/4 cup dried cranberries.",
+      "3": "Add 2 tbsp dark chocolate chips.",
+      "4": "Mix everything together and portion into servings."
+    },
+    "ingredients": {
+      "Almonds": "1/4 cup",
+      "Cashews": "1/4 cup",
+      "Walnuts": "1/4 cup",
+      "Raisins": "1/4 cup",
+      "Dried cranberries": "1/4 cup",
+      "Dark chocolate chips": "2 tbsp"
+    },
+    "calories": 310,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "cheese-crackers",
+    "category": "snacks",
+    "imageUrl": "images/recipes/cheese-crackers.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Cheese and Crackers",
+    "cookTime": "0 min",
+    "prepTime": "5 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "12g",
+    "instructions": {
+      "1": "Arrange 6-8 whole grain crackers on a plate.",
+      "2": "Slice 2 oz of cheddar cheese into thin slices.",
+      "3": "Lay cheese slices on the crackers.",
+      "4": "Optionally add a slice of apple or grapes on the side."
+    },
+    "ingredients": {
+      "Whole grain crackers": "6-8",
+      "Cheddar cheese": "2 oz",
+      "Apple or grapes": "optional side"
+    },
+    "calories": 280,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "guacamole-chips",
+    "category": "snacks",
+    "imageUrl": "images/recipes/guacamole-chips.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Guacamole with Chips",
+    "cookTime": "0 min",
+    "prepTime": "10 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "6g",
+    "instructions": {
+      "1": "Halve 1 ripe avocado, remove pit, and scoop into a bowl.",
+      "2": "Mash with a fork to desired consistency.",
+      "3": "Add 2 tbsp diced tomato, 1 tbsp minced onion, 1 tbsp cilantro, and 1 tbsp lime juice.",
+      "4": "Season with salt, pepper, and a pinch of cumin. Mix well.",
+      "5": "Serve with tortilla chips."
+    },
+    "ingredients": {
+      "Avocado": "1 ripe",
+      "Tomato": "2 tbsp diced",
+      "Onion": "1 tbsp minced",
+      "Cilantro": "1 tbsp",
+      "Lime juice": "1 tbsp",
+      "Cumin": "pinch",
+      "Tortilla chips": "for serving"
+    },
+    "calories": 240,
+    "cuisine": "Mexican",
+    "servings": 1
+  },
+  {
+    "id": "protein-bar",
+    "category": "snacks",
+    "imageUrl": "images/recipes/protein-bar.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Protein Bar",
+    "cookTime": "0 min",
+    "prepTime": "0 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "20g",
+    "instructions": {
+      "1": "Grab 1 store-bought or homemade protein bar.",
+      "2": "Check the label for macros that fit your goals.",
+      "3": "Best paired with a piece of fruit or glass of water."
+    },
+    "ingredients": {
+      "Protein bar": "1 bar (look for 20g+ protein)"
+    },
+    "calories": 220,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "yogurt-honey",
+    "category": "snacks",
+    "imageUrl": "images/recipes/yogurt-honey.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Yogurt with Honey",
+    "cookTime": "0 min",
+    "prepTime": "3 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "12g",
+    "instructions": {
+      "1": "Scoop 1/2 cup Greek yogurt into a bowl or glass.",
+      "2": "Drizzle 1 tsp honey over the top.",
+      "3": "Add a sprinkle of cinnamon if desired.",
+      "4": "Top with a few almonds or granola for crunch."
+    },
+    "ingredients": {
+      "Greek yogurt": "1/2 cup",
+      "Honey": "1 tsp",
+      "Cinnamon": "pinch",
+      "Almonds or granola": "optional"
+    },
+    "calories": 180,
+    "cuisine": "Mediterranean",
+    "servings": 1
+  },
+  {
+    "id": "almonds",
+    "category": "snacks",
+    "imageUrl": "images/recipes/almonds.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Almonds",
+    "cookTime": "0 min",
+    "prepTime": "0 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "6g",
+    "instructions": {
+      "1": "Portion 1 oz of raw or roasted almonds (about 23 almonds).",
+      "2": "Eat slowly and pair with a piece of fruit or glass of water."
+    },
+    "ingredients": {
+      "Raw or roasted almonds": "1 oz (about 23)"
+    },
+    "calories": 170,
+    "cuisine": "Mediterranean",
+    "servings": 1
+  },
+  {
+    "id": "caprese-skewers",
+    "category": "snacks",
+    "imageUrl": "images/recipes/caprese-skewers.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Caprese Skewers",
+    "cookTime": "0 min",
+    "prepTime": "10 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "10g",
+    "instructions": {
+      "1": "Cut 4 oz fresh mozzarella into 1-inch cubes.",
+      "2": "Cut 8 cherry tomatoes in half.",
+      "3": "Roll each mozzarella cube in a basil leaf.",
+      "4": "Thread onto small skewers: tomato, basil-mozzarella, tomato.",
+      "5": "Arrange on a plate and drizzle with 1 tbsp balsamic glaze.",
+      "6": "Season with flaky salt and cracked pepper."
+    },
+    "ingredients": {
+      "Fresh mozzarella": "4 oz",
+      "Cherry tomatoes": "8",
+      "Fresh basil leaves": "8",
+      "Balsamic glaze": "1 tbsp",
+      "Flaky salt": "pinch"
+    },
+    "calories": 200,
+    "cuisine": "Italian",
+    "servings": 1
+  },
+  {
+    "id": "edamame",
+    "category": "snacks",
+    "imageUrl": "images/recipes/edamame.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Edamame",
+    "cookTime": "5 min",
+    "prepTime": "3 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "12g",
+    "instructions": {
+      "1": "Bring a small pot of salted water to a boil.",
+      "2": "Add 1 cup frozen edamame in the pod.",
+      "3": "Boil 4-5 minutes until tender.",
+      "4": "Drain and toss with a pinch of sea salt.",
+      "5": "Serve in a bowl — squeeze pods to release beans."
+    },
+    "ingredients": {
+      "Frozen edamame in pod": "1 cup",
+      "Sea salt": "pinch"
+    },
+    "calories": 140,
+    "cuisine": "Asian",
+    "servings": 1
+  },
+  {
+    "id": "roasted-chickpeas",
+    "category": "snacks",
+    "imageUrl": "images/recipes/roasted-chickpeas.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Roasted Chickpeas",
+    "cookTime": "30 min",
+    "prepTime": "5 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "10g",
+    "instructions": {
+      "1": "Preheat oven to 400°F.",
+      "2": "Drain and rinse 1 can chickpeas. Pat very dry with paper towels.",
+      "3": "Toss with 1 tbsp olive oil, 1 tsp cumin, 1/2 tsp garlic powder, 1/2 tsp paprika, salt and pepper.",
+      "4": "Spread in a single layer on a baking sheet.",
+      "5": "Roast 25-30 min, shaking the pan every 10 min, until golden and crispy.",
+      "6": "Let cool slightly before eating (they get crunchier as they cool)."
+    },
+    "ingredients": {
+      "Chickpeas": "1 can",
+      "Olive oil": "1 tbsp",
+      "Cumin": "1 tsp",
+      "Garlic powder": "1/2 tsp",
+      "Paprika": "1/2 tsp",
+      "Salt and pepper": "to taste"
+    },
+    "calories": 200,
+    "cuisine": "Middle Eastern",
+    "servings": 1
+  },
+  {
+    "id": "dark-chocolate",
+    "category": "snacks",
+    "imageUrl": "images/recipes/dark-chocolate.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Dark Chocolate",
+    "cookTime": "0 min",
+    "prepTime": "0 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "4g",
+    "instructions": {
+      "1": "Break off 2 squares (40g) of dark chocolate (70%+ cacao).",
+      "2": "Eat slowly, letting it melt in your mouth.",
+      "3": "Pair with a handful of almonds or a glass of water."
+    },
+    "ingredients": {
+      "Dark chocolate 70%+": "2 squares (40g)"
+    },
+    "calories": 180,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "cottage-cheese-fruit",
+    "category": "snacks",
+    "imageUrl": "images/recipes/cottage-cheese-fruit.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Cottage Cheese with Fruit",
+    "cookTime": "0 min",
+    "prepTime": "3 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "14g",
+    "instructions": {
+      "1": "Scoop 1/2 cup cottage cheese into a bowl.",
+      "2": "Top with 1/4 cup fresh berries or sliced peaches.",
+      "3": "Drizzle with 1 tsp honey.",
+      "4": "Sprinkle with a pinch of cinnamon."
+    },
+    "ingredients": {
+      "Cottage cheese": "1/2 cup",
+      "Fresh berries or peaches": "1/4 cup",
+      "Honey": "1 tsp",
+      "Cinnamon": "pinch"
+    },
+    "calories": 160,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "deviled-eggs",
+    "category": "snacks",
+    "imageUrl": "images/recipes/deviled-eggs.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Deviled Eggs",
+    "cookTime": "15 min",
+    "prepTime": "20 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "14g",
+    "instructions": {
+      "1": "Bring a pot of water to boil. Gently lower 4 eggs in. Boil 10 min. Transfer to ice bath. Peel.",
+      "2": "Halve eggs lengthwise. Pop yolks into a bowl.",
+      "3": "Mash yolks with 2 tbsp mayonnaise, 1 tsp Dijon mustard, 1 tsp white wine vinegar, salt and pepper.",
+      "4": "Add 1 tbsp sweet pickle relish and mix well.",
+      "5": "Pipe or spoon filling back into egg white halves.",
+      "6": "Top with smoked paprika and fresh chives."
+    },
+    "ingredients": {
+      "Eggs": "4",
+      "Mayonnaise": "2 tbsp",
+      "Dijon mustard": "1 tsp",
+      "White wine vinegar": "1 tsp",
+      "Sweet pickle relish": "1 tbsp",
+      "Smoked paprika": "for garnish",
+      "Fresh chives": "for garnish",
+      "Salt and pepper": "to taste"
+    },
+    "calories": 200,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "stuffed-mini-peppers",
+    "category": "snacks",
+    "imageUrl": "images/recipes/stuffed-mini-peppers.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Stuffed Mini Peppers",
+    "cookTime": "15 min",
+    "prepTime": "10 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "8g",
+    "instructions": {
+      "1": "Preheat oven to 375°F.",
+      "2": "Slice 6 mini bell peppers in half lengthwise. Remove seeds.",
+      "3": "Mix 4 oz cream cheese, 1/4 cup shredded cheddar, 2 tbsp cooked corn, and 1 tbsp diced jalapeño.",
+      "4": "Stuff each pepper half with the cream cheese mixture.",
+      "5": "Bake 12-15 min until peppers are tender and filling is bubbly.",
+      "6": "Garnish with cilantro and serve warm."
+    },
+    "ingredients": {
+      "Mini bell peppers": "6",
+      "Cream cheese": "4 oz",
+      "Shredded cheddar": "1/4 cup",
+      "Corn": "2 tbsp",
+      "Jalapeño": "1 tbsp diced",
+      "Cilantro": "for garnish"
+    },
+    "calories": 160,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "smoothie",
+    "category": "snacks",
+    "imageUrl": "images/recipes/smoothie.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Smoothie",
+    "cookTime": "0 min",
+    "prepTime": "5 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "16g",
+    "instructions": {
+      "1": "Add 1 frozen banana, 1/2 cup frozen mixed berries, 1 cup almond milk, and 1 tbsp honey to a blender.",
+      "2": "Blend until smooth.",
+      "3": "Pour into a glass and drink immediately."
+    },
+    "ingredients": {
+      "Frozen banana": "1",
+      "Frozen mixed berries": "1/2 cup",
+      "Almond milk": "1 cup",
+      "Honey": "1 tbsp"
+    },
+    "calories": 240,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "celery-cream-cheese",
+    "category": "snacks",
+    "imageUrl": "images/recipes/celery-cream-cheese.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Celery with Cream Cheese",
+    "cookTime": "0 min",
+    "prepTime": "3 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "4g",
+    "instructions": {
+      "1": "Wash and dry 3 celery stalks. Cut into 3-inch pieces.",
+      "2": "Fill each celery piece with 1 tbsp cream cheese.",
+      "3": "Optional: top with raisins or everything bagel seasoning."
+    },
+    "ingredients": {
+      "Celery": "3 stalks",
+      "Cream cheese": "3 tbsp",
+      "Raisins or everything seasoning": "optional"
+    },
+    "calories": 120,
+    "cuisine": "American",
+    "servings": 1
+  },
+  {
+    "id": "fruit-cup",
+    "category": "snacks",
+    "imageUrl": "images/recipes/fruit-cup.jpg",
+    "diet": "vegetarian",
+    "approvedBy": "Trill AI",
+    "name": "Fruit Cup",
+    "cookTime": "0 min",
+    "prepTime": "10 min",
+    "submittedBy": "Trill AI",
+    "submittedAt": "2026-04-16",
+    "protein": "2g",
+    "instructions": {
+      "1": "Wash and dice: 1/2 cup strawberries, 1/4 cup pineapple chunks, 1/4 cup blueberries, 1/4 cup grapes.",
+      "2": "Combine in a bowl.",
+      "3": "Toss with 1 tbsp lime juice and a pinch of mint.",
+      "4": "Chill until ready to serve."
+    },
+    "ingredients": {
+      "Strawberries": "1/2 cup diced",
+      "Pineapple": "1/4 cup",
+      "Blueberries": "1/4 cup",
+      "Grapes": "1/4 cup",
+      "Lime juice": "1 tbsp",
+      "Mint": "pinch"
+    },
+    "calories": 120,
+    "cuisine": "American",
+    "servings": 1
+  }
+]

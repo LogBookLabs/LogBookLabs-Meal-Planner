@@ -1,0 +1,29 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "dependencies": {
+    "enabledAdvancedServices": []
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "sheets": {
+    "metainfo": {
+      "properties": {
+        "title": "Meal Planner Pro"
+      },
+      "sheets": [
+        { "properties": { "title": "Dashboard", "index": 0 } },
+        { "properties": { "title": "Planner", "index": 1 } },
+        { "properties": { "title": "Grocery", "index": 2 } },
+        { "properties": { "title": "Recipes", "index": 3 } },
+        { "properties": { "title": "Data", "index": 4, "hidden": true } }
+      ]
+    }
+  },
+  "addOns": {
+    "common": {
+      "name": "Meal Planner Pro",
+      "company": "",
+      "termsOfServiceUrl": "",
+      "privacyUrl": ""
+    }
+  }
+}
