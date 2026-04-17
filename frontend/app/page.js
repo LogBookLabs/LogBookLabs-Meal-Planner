@@ -535,7 +535,7 @@ export default function MealPlannerPage() {
                     {(r.imageUrl || r.ImageURL || r.ImageUrl) ? <img src={r.imageUrl || r.ImageURL || r.ImageUrl} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }} /> : <div style={{ width: 44, height: 44, borderRadius: 8, background: '#E8F4F8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>&#127860;</div>}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#1E2A33', marginBottom: '0.125rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.Name || r.name || 'Unnamed'}</p>
-                      <p style={{ fontSize: '0.725rem', color: '#5A7180' }}>{(r.calories ?? r.calorie) ? (r.calories ?? r.calorie) + ' cal' : '---'} &middot; {r.prepTime || r.cookTime || '---'} min</p>
+                      <p style={{ fontSize: '0.725rem', color: '#5A7180' }}>{(r.calories ?? r.calorie) ? (r.calories ?? r.calorie) + ' cal' : '---'} &middot; {(r.prepTime || r.cookTime || '---').toString().replace(/\s*min$/i, '') + ' min'}</p>
                     </div>
                     <div style={{ color: '#1A8BA5', fontSize: '0.775rem', fontWeight: 600, flexShrink: 0 }}>View &rarr;</div>
                   </div>
@@ -564,7 +564,7 @@ export default function MealPlannerPage() {
                     <p style={{ fontWeight: 700, fontSize: '1.5rem', color: '#ffffff', margin: '0 0 0.75rem', lineHeight: 1.2 }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
                     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                       {(selectedRecipe.calories || selectedRecipe.calorie) && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>🔥</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.calories || selectedRecipe.calorie} kcal</span></div>}
-                      {(selectedRecipe.prepTime || selectedRecipe.cookTime) && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>⏱</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.prepTime && selectedRecipe.cookTime ? (parseInt(selectedRecipe.prepTime) + parseInt(selectedRecipe.cookTime)) + ' min' : (selectedRecipe.prepTime || selectedRecipe.cookTime)}</span></div>}
+                      {(selectedRecipe.prepTime || selectedRecipe.cookTime) && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>⏱</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.prepTime && selectedRecipe.cookTime ? (parseInt(selectedRecipe.prepTime) + parseInt(selectedRecipe.cookTime)) + ' min' : (selectedRecipe.prepTime || selectedRecipe.cookTime).toString().replace(/\s*min$/i, '') + ' min'}</span></div>}
                       {selectedRecipe.servings && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>👤</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.servings}</span></div>}
                       {selectedRecipe.cuisine && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>📍</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.cuisine}</span></div>}
                     </div>
@@ -1089,7 +1089,7 @@ export default function MealPlannerPage() {
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
                   <button onClick={function() { openPicker(activeDay, meal); }} style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', border: 'none', borderRadius: 6, color: '#ffffff', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', padding: '0.25rem 0.5rem' }}>Change</button>
-                  <button onClick={function() { handleSaveMeal(activeDay, meal, '', targetWeek !== 'week1' ? targetWeek : null); }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', cursor: 'pointer', padding: '0.25rem 0.25rem' }}>Remove</button>
+                  <button onClick={function() { handleSaveMeal(activeDay, meal, '', targetWeek !== 'week1' ? targetWeek : null); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: 6, color: 'rgba(255,255,255,0.85)', fontSize: '0.75rem', cursor: 'pointer', padding: '0.25rem 0.4rem' }}>Remove</button>
                 </div>
               </div>
             </div>
@@ -1202,8 +1202,7 @@ export default function MealPlannerPage() {
         <div style={{
           maxWidth: 1160,
           margin: '0 auto',
-          padding: '40px 48px',
-          minHeight: 'calc(100vh - 64px)',
+          padding: '24px 96px 24px 48px',
           background: darkMode ? '#1A2A3A' : '#ffffff',
           borderRadius: 20,
           boxShadow: darkMode
