@@ -1094,7 +1094,7 @@ export default function MealPlannerPage() {
     var cookTime = recipeObj ? (recipeObj.cookTime || recipeObj.CookTime || recipeObj.cook_time || '—') : null;
     var calories = recipeObj ? (recipeObj.calories || recipeObj.Calories || '—') : null;
     return (
-      <div style={{ background: '#ffffff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 2px 12px rgba(11,29,46,0.06)' }}>
+      <div style={{ background: '#ffffff', borderRadius: 16, overflow: 'hidden' }}>
         <div style={{ padding: '0.75rem 1rem', background: 'linear-gradient(to right, ' + grad.from + ', ' + grad.to + ')', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <span style={{ fontSize: '1.25rem' }}>{MEAL_ICONS[meal]}</span>
           <span style={{ color: '#ffffff', fontWeight: 600, fontSize: '0.875rem' }}>{meal}</span>
