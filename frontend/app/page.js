@@ -129,6 +129,17 @@ export default function MealPlannerPage() {
     }
   }, [darkMode]);
 
+  // ESC key closes recipe detail
+  useEffect(function() {
+    function handleKeyDown(e) {
+      if (e.key === 'Escape' && selectedRecipe) {
+        handleBackToList();
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return function() { document.removeEventListener('keydown', handleKeyDown); };
+  }, [selectedRecipe]);
+
   // Load GitHub recipes and initial sheet data on mount
   useEffect(function() {
     if (typeof window === 'undefined') return;
@@ -510,6 +521,9 @@ export default function MealPlannerPage() {
 
         {selectedRecipe && (
           <div style={{ overflowY: 'auto', flex: 1, minHeight: 0, maxHeight: '60vh', padding: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+              <button onClick={handleBackToList} style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: '#5A7180', padding: '0.25rem' }}>✕</button>
+            </div>
             {(selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl) && <img src={selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl} style={{ width: '100%', height: 180, objectFit: 'cover', borderRadius: 12, marginBottom: '1rem' }} />}
             <p style={{ fontWeight: 700, fontSize: '1.2rem', color: '#1E2A33', marginBottom: '0.75rem' }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
