@@ -1101,9 +1101,8 @@ export default function MealPlannerPage() {
         </div>
         <div style={{ position: 'relative', minHeight: 140 }}>
           {hasPhoto ? (
-            <div style={{ position: 'relative' }}>
+            <div style={{ position: 'relative' }} onClick={function(e) { e.stopPropagation(); var r = recipes.find(function(x) { return (x.name || x.Name || '') === current; }); if (r) { setTargetWeek('week1'); setActiveMeal(meal); setSelectedRecipe(r); setShowRecipePicker(true); } else { openPicker(activeDay, meal); } }}>
               <img src={imgSrc} alt={current} style={{ width: '100%', height: 140, objectFit: 'cover', display: 'block' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(11,29,46,0.85) 0%, rgba(11,29,46,0.3) 50%, rgba(11,29,46,0) 100%)' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0.75rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#ffffff', margin: 0, lineHeight: 1.3 }}>{current}</p>
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.375rem', flexWrap: 'wrap' }}>
@@ -1115,19 +1114,19 @@ export default function MealPlannerPage() {
                   ) : null}
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
-                  <button onClick={function() { openPicker(activeDay, meal); }} style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', border: 'none', borderRadius: 6, color: '#ffffff', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', padding: '0.25rem 0.5rem' }}>Change</button>
-                  <button onClick={function() { handleSaveMeal(activeDay, meal, '', targetWeek !== 'week1' ? targetWeek : null); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: 6, color: 'rgba(255,255,255,0.85)', fontSize: '0.75rem', cursor: 'pointer', padding: '0.25rem 0.4rem' }}>Remove</button>
+                  <button onClick={function(e) { e.stopPropagation(); openPicker(activeDay, meal); }} style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)', border: 'none', borderRadius: 6, color: '#ffffff', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', padding: '0.25rem 0.5rem' }}>Change</button>
+                  <button onClick={function(e) { e.stopPropagation(); handleSaveMeal(activeDay, meal, '', targetWeek !== 'week1' ? targetWeek : null); }} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: 6, color: 'rgba(255,255,255,0.85)', fontSize: '0.75rem', cursor: 'pointer', padding: '0.25rem 0.4rem' }}>Remove</button>
                 </div>
               </div>
             </div>
           ) : (
             <div style={{ padding: '1rem' }}>
               {current ? (
-                <div>
-                  <p style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1E2A33' }}>{current}</p>
+                <div onClick={function(e) { e.stopPropagation(); var r = recipes.find(function(x) { return (x.name || x.Name || '') === current; }); if (r) { setTargetWeek('week1'); setActiveMeal(meal); setSelectedRecipe(r); setShowRecipePicker(true); } else { openPicker(activeDay, meal); } }}>
+                  <p style={{ fontWeight: 600, fontSize: '0.9rem', color: '#1E2A33', cursor: 'pointer' }}>{current}</p>
                   <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
-                    <button onClick={function() { openPicker(activeDay, meal); }} style={{ background: 'none', border: 'none', color: '#1A8BA5', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', padding: 0 }}>Change</button>
-                    <button onClick={function() { handleSaveMeal(activeDay, meal, '', targetWeek !== 'week1' ? targetWeek : null); }} style={{ background: 'none', border: 'none', color: '#aaa', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}>Remove</button>
+                    <button onClick={function(e) { e.stopPropagation(); openPicker(activeDay, meal); }} style={{ background: 'none', border: 'none', color: '#1A8BA5', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', padding: 0 }}>Change</button>
+                    <button onClick={function(e) { e.stopPropagation(); handleSaveMeal(activeDay, meal, '', targetWeek !== 'week1' ? targetWeek : null); }} style={{ background: 'none', border: 'none', color: '#aaa', fontSize: '0.8rem', cursor: 'pointer', padding: 0 }}>Remove</button>
                   </div>
                 </div>
               ) : (
