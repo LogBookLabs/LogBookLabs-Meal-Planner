@@ -1102,7 +1102,7 @@ export default function MealPlannerPage() {
         <div style={{ position: 'relative', minHeight: 140 }}>
           {hasPhoto ? (
             <div style={{ position: 'relative' }} onClick={function(e) { e.stopPropagation(); var r = recipes.find(function(x) { return (x.name || x.Name || '') === current; }); if (r) { setTargetWeek('week1'); setActiveMeal(meal); setSelectedRecipe(r); setShowRecipePicker(true); } else { openPicker(activeDay, meal); } }}>
-              <img src={imgSrc} alt={current} style={{ width: '100%', height: 140, objectFit: 'cover', display: 'block' }} />
+              <img src={imgSrc} alt={current} style={{ width: '100%', height: 140, objectFit: 'cover', display: 'block', borderRadius: '16px' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0.75rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#ffffff', margin: 0, lineHeight: 1.3 }}>{current}</p>
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.375rem', flexWrap: 'wrap' }}>
