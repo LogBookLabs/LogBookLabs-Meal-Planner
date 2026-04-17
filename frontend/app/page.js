@@ -78,6 +78,14 @@ export default function MealPlannerPage() {
   const [pickerTab, setPickerTab] = useState('recipes');
   const [quickAddText, setQuickAddText] = useState('');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  // Cook Mode state
+  const [cookMode, setCookMode] = useState(false);
+  const [cookStep, setCookStep] = useState(0);
+  const [cookTimer, setCookTimer] = useState(null);
+  const [cookTimerRunning, setCookTimerRunning] = useState(false);
+  const [cookTimerSeconds, setCookTimerSeconds] = useState(0);
 
   // Shopping list manual entry
   const [manualItem, setManualItem] = useState('');
@@ -132,13 +140,24 @@ export default function MealPlannerPage() {
   // ESC key closes recipe detail
   useEffect(function() {
     function handleKeyDown(e) {
-      if (e.key === 'Escape' && selectedRecipe) {
-        handleBackToList();
+      if (e.key === 'Escape') {
+        if (cookMode) { setCookMode(false); setCookTimerRunning(false); return; }
+        if (showInstructions) { setShowInstructions(false); return; }
+        if (selectedRecipe) { handleBackToList(); }
       }
     }
     document.addEventListener('keydown', handleKeyDown);
     return function() { document.removeEventListener('keydown', handleKeyDown); };
-  }, [selectedRecipe]);
+  }, [selectedRecipe, cookMode]);
+
+  // Cook mode timer tick
+  useEffect(function() {
+    if (!cookTimerRunning || cookTimerSeconds <= 0) return;
+    var interval = setInterval(function() {
+      setCookTimerSeconds(function(s) { return s > 0 ? s - 1 : 0; });
+    }, 1000);
+    return function() { clearInterval(interval); };
+  }, [cookTimerRunning]);
 
   // Load GitHub recipes and initial sheet data on mount
   useEffect(function() {
@@ -322,11 +341,16 @@ export default function MealPlannerPage() {
   // ── INGREDIENTS MODAL ────────────────────────────────────────────────────
   function openIngredientsModal(recipe) {
     if (!recipe || !recipe.ingredients) return;
-    const ings = Array.isArray(recipe.ingredients)
-      ? recipe.ingredients.filter(Boolean).map(i => typeof i === 'string' ? i.trim() : i)
-      : (typeof recipe.ingredients === 'string' ? recipe.ingredients.split('|').filter(Boolean).map(i => i.trim()) : []);
-    const init = {};
-    ings.forEach(ing => { init[typeof ing === 'string' ? ing : JSON.stringify(ing)] = false; });
+    var ings;
+    if (Array.isArray(recipe.ingredients)) {
+      ings = recipe.ingredients.filter(Boolean).map(function(i) { return typeof i === 'string' ? i.trim() : i; });
+    } else if (typeof recipe.ingredients === 'string') {
+      ings = recipe.ingredients.split('|').filter(Boolean).map(function(i) { return i.trim(); });
+    } else {
+      ings = Object.keys(recipe.ingredients);
+    }
+    var init = {};
+    ings.forEach(function(ing) { init[typeof ing === 'string' ? ing.trim() : JSON.stringify(ing)] = false; });
     setModalRecipe(recipe);
     setSelectedIngredients(init);
     setShowIngredientsModal(true);
@@ -340,15 +364,20 @@ export default function MealPlannerPage() {
 
   function handleAddSelectedToList() {
     if (!modalRecipe || !modalRecipe.ingredients) return;
-    const allIngs = Array.isArray(modalRecipe.ingredients)
-      ? modalRecipe.ingredients.filter(Boolean).map(i => typeof i === 'string' ? i.trim() : i)
-      : (typeof modalRecipe.ingredients === 'string' ? modalRecipe.ingredients.split('|').filter(Boolean).map(i => i.trim()) : []);
-    const toAdd = allIngs.filter(ing => selectedIngredients[typeof ing === 'string' ? ing : JSON.stringify(ing)]);
+    var allIngs;
+    if (Array.isArray(modalRecipe.ingredients)) {
+      allIngs = modalRecipe.ingredients.filter(Boolean).map(function(i) { return typeof i === 'string' ? i.trim() : i; });
+    } else if (typeof modalRecipe.ingredients === 'string') {
+      allIngs = modalRecipe.ingredients.split('|').filter(Boolean).map(function(i) { return i.trim(); });
+    } else {
+      allIngs = Object.keys(modalRecipe.ingredients);
+    }
+    const toAdd = allIngs.filter(function(ing) { return selectedIngredients[typeof ing === 'string' ? ing.trim() : JSON.stringify(ing)]; });
     if (toAdd.length === 0) {
       showToast('No items selected');
       return;
     }
-    addToShoppingList(toAdd.map(i => typeof i === 'string' ? i : JSON.stringify(i)));
+    addToShoppingList(toAdd.map(function(i) { return typeof i === 'string' ? i.trim() : JSON.stringify(i); }));
     showToast(toAdd.length + ' item' + (toAdd.length > 1 ? 's' : '') + ' added to shopping list');
     closeIngredientsModal();
   }
@@ -361,10 +390,15 @@ export default function MealPlannerPage() {
 
   function handleAddAllToList() {
     if (!modalRecipe || !modalRecipe.ingredients) return;
-    const allIngs = Array.isArray(modalRecipe.ingredients)
-      ? modalRecipe.ingredients.filter(Boolean).map(i => typeof i === 'string' ? i.trim() : i)
-      : (typeof modalRecipe.ingredients === 'string' ? modalRecipe.ingredients.split('|').filter(Boolean).map(i => i.trim()) : []);
-    addToShoppingList(allIngs.map(i => typeof i === 'string' ? i : JSON.stringify(i)));
+    var allIngs;
+    if (Array.isArray(modalRecipe.ingredients)) {
+      allIngs = modalRecipe.ingredients.filter(Boolean).map(function(i) { return typeof i === 'string' ? i.trim() : i; });
+    } else if (typeof modalRecipe.ingredients === 'string') {
+      allIngs = modalRecipe.ingredients.split('|').filter(Boolean).map(function(i) { return i.trim(); });
+    } else {
+      allIngs = Object.keys(modalRecipe.ingredients);
+    }
+    addToShoppingList(allIngs.map(function(i) { return typeof i === 'string' ? i.trim() : JSON.stringify(i); }));
     showToast(allIngs.length + ' items added to shopping list');
     closeIngredientsModal();
   }
@@ -464,8 +498,8 @@ export default function MealPlannerPage() {
   var hasActivePickerFilters = pickerSearch || pickerMeal || pickerCuisine || pickerDiet || pickerCalories || pickerCookTime || pickerProtein || pickerIngredients;
 
   var recipePicker = showRecipePicker ? (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 150, background: 'rgba(11,29,46,0.5)', display: 'flex', alignItems: 'flex-end' }} onClick={function(e) { if (e.target === e.currentTarget) { closePicker(); } }}>
-      <div style={{ width: '100%', background: '#ffffff', borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '88vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 150, background: 'rgba(11,29,46,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={function(e) { if (e.target === e.currentTarget) { closePicker(); } }}>
+      <div style={{ width: '100%', maxWidth: 1160, maxHeight: '92vh', background: '#ffffff', borderRadius: 20, overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 8px 40px rgba(11,29,46,0.18)', margin: '0 1rem' }}>
         <div style={{ width: 40, height: 4, background: '#D1E3EA', borderRadius: 2, margin: '1rem auto 0', flexShrink: 0 }} />
         <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #E8F4F8', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div style={{ display: 'flex', gap: '0.25rem' }}>
@@ -519,46 +553,195 @@ export default function MealPlannerPage() {
           </div>
         )}
 
-        {selectedRecipe && (
-          <div style={{ overflowY: 'auto', flex: 1, minHeight: 0, maxHeight: '60vh', padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
-              <button onClick={handleBackToList} style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: '#5A7180', padding: '0.25rem' }}>✕</button>
-            </div>
-            {(selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl) && <img src={selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl} style={{ width: '100%', height: 180, objectFit: 'cover', borderRadius: 12, marginBottom: '1rem' }} />}
-            <p style={{ fontWeight: 700, fontSize: '1.2rem', color: '#1E2A33', marginBottom: '0.75rem' }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-              {[{ label: 'CALORIES', val: (selectedRecipe.calories ?? selectedRecipe.calorie) || '---' }, { label: 'PREP TIME', val: selectedRecipe.prepTime || '---' }, { label: 'COOK TIME', val: selectedRecipe.cookTime || '---' }, { label: 'SERVINGS', val: selectedRecipe.servings || '---' }, { label: 'CUISINE', val: selectedRecipe.cuisine || '---' }].map(function(s) {
-                return <div key={s.label} style={{ background: '#E8F4F8', borderRadius: 8, padding: '0.4rem 0.75rem' }}><p style={{ fontSize: '0.625rem', color: '#5A7180', fontWeight: 700, marginBottom: '0.125rem' }}>{s.label}</p><p style={{ fontSize: '0.8rem', color: '#1E2A33', fontWeight: 700 }}>{s.val}</p></div>;
-              })}
-            </div>
-            {selectedRecipe.ingredients && selectedRecipe.ingredients.length > 0 && (
-              <div style={{ marginBottom: '1rem' }}>
-                <p style={{ fontWeight: 700, fontSize: '0.75rem', color: '#5A7180', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Ingredients</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
-                  {(Array.isArray(selectedRecipe.ingredients) ? selectedRecipe.ingredients : (typeof selectedRecipe.ingredients === 'string' ? selectedRecipe.ingredients.split('|') : [])).filter(Boolean).map(function(ing, idx) {
-                    return <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><div style={{ width: 5, height: 5, borderRadius: '50%', background: '#1A8BA5', flexShrink: 0 }} /><span style={{ fontSize: '0.825rem', color: '#1E2A33' }}>{typeof ing === 'string' ? ing.trim() : ing}</span></div>;
-                  })}
+        {selectedRecipe && !showInstructions && (
+          <div style={{ display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+            <div style={{ flex: '0 0 60%', overflowY: 'auto', borderRight: '1px solid #E8F4F8' }}>
+              {/* Hero Image */}
+              {(selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl) && (
+                <div style={{ position: 'relative' }}>
+                  <img src={selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl} style={{ width: '100%', height: 240, objectFit: 'cover', display: 'block' }} />
+                  <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(11,29,46,0.75))', padding: '3rem 1.25rem 1rem' }}>
+                    <p style={{ fontWeight: 700, fontSize: '1.5rem', color: '#ffffff', margin: '0 0 0.75rem', lineHeight: 1.2 }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                      {(selectedRecipe.calories || selectedRecipe.calorie) && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>🔥</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.calories || selectedRecipe.calorie} kcal</span></div>}
+                      {(selectedRecipe.prepTime || selectedRecipe.cookTime) && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>⏱</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.prepTime && selectedRecipe.cookTime ? (parseInt(selectedRecipe.prepTime) + parseInt(selectedRecipe.cookTime)) + ' min' : (selectedRecipe.prepTime || selectedRecipe.cookTime)}</span></div>}
+                      {selectedRecipe.servings && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>👤</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.servings}</span></div>}
+                      {selectedRecipe.cuisine && <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><span style={{ fontSize: '0.85rem', color: '#ffffff' }}>📍</span><span style={{ fontSize: '0.8rem', color: '#ffffff', fontWeight: 600 }}>{selectedRecipe.cuisine}</span></div>}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-            {selectedRecipe.instructions && selectedRecipe.instructions.length > 0 && (
-              <div style={{ marginBottom: '1rem' }}>
-                <p style={{ fontWeight: 700, fontSize: '0.75rem', color: '#5A7180', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Instructions</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {selectedRecipe.instructions.map(function(step, idx) {
-                    return <div key={idx} style={{ display: 'flex', gap: '0.625rem' }}><div style={{ width: 22, height: 22, borderRadius: '50%', background: '#E8F4F8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: '0.7rem', fontWeight: 700, color: '#1A8BA5' }}>{idx + 1}</div><span style={{ fontSize: '0.825rem', color: '#1E2A33', lineHeight: 1.5, paddingTop: '0.1rem' }}>{step}</span></div>;
-                  })}
+              )}
+              {!selectedRecipe.imageUrl && !selectedRecipe.ImageURL && !selectedRecipe.ImageUrl && (
+                <div style={{ padding: '1.5rem 1.5rem 0' }}>
+                  <p style={{ fontWeight: 700, fontSize: '1.5rem', color: '#1E2A33', margin: '0 0 1rem' }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
                 </div>
+              )}
+              <div style={{ padding: '0 1.5rem 1.5rem' }}>
+                {/* Add to Meal button */}
+                <button onClick={handleAddRecipe} style={{ width: '100%', padding: '0.875rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer', marginBottom: '0.75rem', boxShadow: '0 2px 8px rgba(26,139,165,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>🔥 Add to {activeMeal}</button>
+                {/* Save / Share */}
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                  <button onClick={function() { var s = selectedRecipe; var entry = { id: 'my_' + Date.now(), name: s.Name || s.name, imageUrl: s.imageUrl || s.ImageURL || s.ImageUrl || '', calories: s.calories || s.calorie, prepTime: s.prepTime, cookTime: s.cookTime, servings: s.servings, cuisine: s.cuisine, ingredients: s.ingredients, instructions: s.instructions, Notes: s.Notes, source: 'saved' }; var saved = JSON.parse(localStorage.getItem('myRecipes') || '[]'); saved.unshift(entry); localStorage.setItem('myRecipes', JSON.stringify(saved)); showNotify('Saved to My Recipes!'); }} style={{ flex: 1, padding: '0.65rem', background: '#ffffff', color: '#1E2A33', border: '1.5px solid #D1E3EA', borderRadius: 10, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>Save to My Recipes</button>
+                  <button onClick={function() { showNotify('Share feature coming soon!'); }} style={{ flex: 1, padding: '0.65rem', background: '#ffffff', color: '#1E2A33', border: '1.5px solid #D1E3EA', borderRadius: 10, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>Share with Community</button>
+                </div>
+                {/* About */}
+                {selectedRecipe.Notes && <div style={{ marginBottom: '1rem' }}><p style={{ fontWeight: 700, fontSize: '0.7rem', color: '#5A7180', marginBottom: '0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>About this recipe</p><p style={{ fontSize: '0.85rem', color: '#1E2A33', lineHeight: 1.6 }}>{selectedRecipe.Notes}</p></div>}
               </div>
-            )}
-            {selectedRecipe.Notes && <div style={{ marginBottom: '1rem' }}><p style={{ fontWeight: 700, fontSize: '0.75rem', color: '#5A7180', marginBottom: '0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Notes</p><p style={{ fontSize: '0.825rem', color: '#1E2A33', lineHeight: 1.5 }}>{selectedRecipe.Notes}</p></div>}
-            <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.5rem', flexWrap: 'wrap' }}>
-              <button onClick={handleBackToList} style={{ flex: 1, minWidth: 100, padding: '0.75rem', background: '#ffffff', color: '#1E2A33', border: '1.5px solid #D1E3EA', borderRadius: 12, fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>&larr; Back</button>
-              {selectedRecipe.ingredients && (Array.isArray(selectedRecipe.ingredients) ? selectedRecipe.ingredients.length > 0 : (typeof selectedRecipe.ingredients === 'string' ? selectedRecipe.ingredients.split('|').filter(Boolean).length > 0 : false)) && <button onClick={function() { openIngredientsModal(selectedRecipe); closePicker(); }} style={{ flex: 2, padding: '0.75rem', background: '#10B981', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Add to Shopping List</button>}
-              <button onClick={handleAddRecipe} style={{ flex: 2, padding: '0.75rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Add to {activeMeal}</button>
+            </div>
+            {/* Right column */}
+            <div style={{ flex: '0 0 40%', overflowY: 'auto', padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1E2A33', margin: 0 }}>Ingredients</p>
+                <button onClick={handleBackToList} style={{ background: 'none', border: 'none', fontSize: '1rem', cursor: 'pointer', color: '#5A7180' }}>✕</button>
+              </div>
+              {/* Ingredient rows */}
+              <div style={{ flex: 1, overflowY: 'auto', marginBottom: '0.75rem' }}>
+                {Object.entries(selectedRecipe.ingredients || {}).map(function(entry, idx) {
+                  var ingName = entry[0];
+                  var ingAmt = entry[1];
+                  var ingKey = ingName.trim();
+                  var checked = !!selectedIngredients[ingKey];
+                  return <div key={idx} onClick={function() { setSelectedIngredients(function(prev) { return { ...prev, [ingKey]: !prev[ingKey] }; }); }} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.6rem 0', borderBottom: '1px solid #F7FAFB', cursor: 'pointer' }}>
+                    <div style={{ width: 20, height: 20, borderRadius: '50%', border: '2px solid ' + (checked ? '#10B981' : '#D1E3EA'), background: checked ? '#10B981' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>{checked && <span style={{ color: '#fff', fontSize: '0.65rem', fontWeight: 700 }}>✓</span>}</div>
+                    <span style={{ flex: 1, fontSize: '0.85rem', color: checked ? '#5A7180' : '#1E2A33', textDecoration: checked ? 'line-through' : 'none' }}>{ingName}</span>
+                    <span style={{ fontSize: '0.8rem', color: '#5A7180', fontWeight: 500, flexShrink: 0 }}>{ingAmt}</span>
+                  </div>;
+                })}
+              </div>
+              {/* Action buttons */}
+              <div style={{ display: 'flex', gap: '0.375rem', marginBottom: '0.75rem' }}>
+                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var all2 = {}; entries.forEach(function(e) { all2[e[0].trim()] = true; }); setSelectedIngredients(all2); }} style={{ flex: 1, padding: '0.5rem', background: '#ffffff', color: '#1E2A33', border: '1px solid #D1E3EA', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>+ Add All</button>
+                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var sel = {}; entries.forEach(function(e) { if (selectedIngredients[e[0].trim()]) sel[e[0].trim()] = true; }); Object.keys(sel).length > 0 ? openIngredientsModal(selectedRecipe) : showNotify('Check some ingredients first!'); }} style={{ flex: 1, padding: '0.5rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Add Selected</button>
+                <button onClick={function() { setSelectedIngredients({}); }} style={{ flex: 1, padding: '0.5rem', background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Clear Selected</button>
+              </div>
+              {/* View Instructions */}
+              {selectedRecipe.instructions && Object.keys(selectedRecipe.instructions).length > 0 && (
+                <button onClick={function() { setShowInstructions(true); }} style={{ width: '100%', padding: '0.75rem', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: 10, fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                  View Instructions <span style={{ fontSize: '1rem' }}>→</span>
+                </button>
+              )}
             </div>
           </div>
         )}
+
+        {selectedRecipe && showInstructions && (
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden', background: '#ffffff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.5rem', borderBottom: '1px solid #E8F4F8', flexShrink: 0 }}>
+              <p style={{ fontWeight: 700, fontSize: '1rem', color: '#1E2A33', margin: 0 }}>Cooking Instructions</p>
+              <button onClick={function() { setShowInstructions(false); }} style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: '#5A7180' }}>✕</button>
+            </div>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem 1.5rem' }}>
+              {Object.values(selectedRecipe.instructions || {}).map(function(step, idx) {
+                return (
+                  <div key={idx} style={{ display: 'flex', gap: '1rem', marginBottom: '1.25rem' }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#1A8BA5', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 700, flexShrink: 0 }}>{idx + 1}</div>
+                    <p style={{ flex: 1, fontSize: '0.9rem', color: '#1E2A33', lineHeight: 1.6, paddingTop: '0.2rem' }}>{step}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #E8F4F8', flexShrink: 0 }}>
+              <button onClick={function() { setCookStep(0); setCookMode(true); }} style={{ width: '100%', padding: '0.875rem', background: '#7C3AED', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px rgba(124,58,237,0.3)' }}>Start Cook Mode ▶</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ) : null;
+
+  // ── COOK MODE OVERLAY ──────────────────────────────────────────────────────
+  var cookModeOverlay = cookMode && selectedRecipe ? (
+    <div
+      style={{
+        position: 'fixed', inset: 0, zIndex: 300,
+        background: '#ffffff',
+        display: 'flex', flexDirection: 'column',
+        animation: 'slideInRight 0.25s ease'
+      }}
+      onClick={function() {
+        var steps = Object.values(selectedRecipe.instructions || {});
+        if (cookStep < steps.length - 1) setCookStep(cookStep + 1);
+      }}
+    >
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.25rem 1.5rem', borderBottom: '1px solid #E8F4F8', flexShrink: 0 }}>
+        <div>
+          <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#5A7180', margin: '0 0 0.2rem' }}>COOK MODE</p>
+          <p style={{ fontWeight: 700, fontSize: '1rem', color: '#1E2A33', margin: 0 }}>{selectedRecipe.Name || selectedRecipe.name}</p>
+        </div>
+        <button
+          onClick={function(e) { e.stopPropagation(); setCookMode(false); setCookTimerRunning(false); setCookTimer(null); setCookTimerSeconds(0); }}
+          style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: '#5A7180', padding: '0.5rem' }}
+        >✕</button>
+      </div>
+
+      {/* Step indicator */}
+      <div style={{ padding: '0.75rem 1.5rem', background: '#F7FAFB', flexShrink: 0, textAlign: 'center' }}>
+        <p style={{ fontSize: '0.85rem', color: '#5A7180', margin: 0, fontWeight: 600 }}>
+          Step {cookStep + 1} of {Object.values(selectedRecipe.instructions || {}).length}
+        </p>
+        <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 8 }}>
+          {Object.values(selectedRecipe.instructions || {}).map(function(_, i) {
+            return <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: i === cookStep ? '#1A8BA5' : i < cookStep ? '#10B981' : '#D1E3EA' }} />;
+          })}
+        </div>
+      </div>
+
+      {/* Step text */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem 2rem 1.5rem', cursor: 'pointer' }}>
+        <p style={{ fontSize: '1.35rem', color: '#1E2A33', lineHeight: 1.7, textAlign: 'center', maxWidth: 680, fontWeight: 500 }}>
+          {Object.values(selectedRecipe.instructions || {})[cookStep]}
+        </p>
+        <p style={{ marginTop: '1.5rem', fontSize: '0.8rem', color: '#9ca3af' }}>Tap anywhere to continue</p>
+      </div>
+
+      {/* Timer button (if step has time mention) */}
+      {Object.values(selectedRecipe.instructions || {})[cookStep] && Object.values(selectedRecipe.instructions || {})[cookStep].match(/\d+[-–]\d+\s*(min|mins|minutes|mins?)|\d+\s*(min|mins|minutes|mins?)/i) && !cookTimerRunning && (
+        <div style={{ padding: '0 1.5rem 0.75rem', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
+          <button
+            onClick={function(e) {
+              e.stopPropagation();
+              var match = Object.values(selectedRecipe.instructions || {})[cookStep].match(/(\d+)[-–](\d+)\s*(min|mins?)|(\d+)\s*(min|mins?)/i);
+              var seconds = 0;
+              if (match) {
+                if (match[1] && match[2]) seconds = (parseInt(match[1]) + parseInt(match[2])) / 2 * 60;
+                else if (match[4]) seconds = parseInt(match[4]) * 60;
+              }
+              setCookTimerSeconds(seconds);
+              setCookTimerRunning(true);
+            }}
+            style={{ padding: '0.6rem 1.25rem', background: '#F59E0B', color: '#fff', border: 'none', borderRadius: 20, fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+          >⏱ Start Timer</button>
+        </div>
+      )}
+
+      {/* Active timer display */}
+      {cookTimerRunning && (
+        <div style={{ padding: '0 1.5rem 0.75rem', flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
+          <div style={{ padding: '0.5rem 1.25rem', background: '#1A2A3A', borderRadius: 20, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ color: '#F59E0B', fontSize: '1rem' }}>⏱</span>
+            <span style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+              {Math.floor(cookTimerSeconds / 60)}:{(cookTimerSeconds % 60).toString().padStart(2, '0')}
+            </span>
+            <button
+              onClick={function(e) { e.stopPropagation(); setCookTimerRunning(false); }}
+              style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 10, padding: '0.2rem 0.5rem', color: '#fff', fontSize: '0.7rem', cursor: 'pointer', fontWeight: 600 }}
+            >Stop</button>
+          </div>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <div style={{ display: 'flex', gap: '0.75rem', padding: '1rem 1.5rem 1.5rem', flexShrink: 0 }}>
+        <button
+          onClick={function(e) { e.stopPropagation(); if (cookStep > 0) setCookStep(cookStep - 1); }}
+          disabled={cookStep === 0}
+          style={{ flex: 1, padding: '0.875rem', background: cookStep === 0 ? '#E8F4F8' : '#ffffff', color: cookStep === 0 ? '#9ca3af' : '#1E2A33', border: '1.5px solid #D1E3EA', borderRadius: 12, fontSize: '0.9rem', fontWeight: 700, cursor: cookStep === 0 ? 'not-allowed' : 'pointer' }}
+        >← Back</button>
+        <button
+          onClick={function(e) { e.stopPropagation(); var steps = Object.values(selectedRecipe.instructions || {}); if (cookStep < steps.length - 1) setCookStep(cookStep + 1); else setCookMode(false); }}
+          style={{ flex: 2, padding: '0.875rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer' }}
+        >{cookStep < Object.values(selectedRecipe.instructions || {}).length - 1 ? 'Next →' : 'Done ✓'}</button>
       </div>
     </div>
   ) : null;
@@ -576,15 +759,17 @@ export default function MealPlannerPage() {
           <button onClick={closeIngredientsModal} style={{ background: 'none', border: 'none', fontSize: '1.1rem', cursor: 'pointer', color: '#5A7180' }}>✕</button>
         </div>
         <div style={{ overflowY: 'auto', flex: 1, minHeight: 0, maxHeight: '70vh', padding: '0.5rem 0' }}>
-          {(Array.isArray(modalRecipe.ingredients) ? modalRecipe.ingredients : (typeof modalRecipe.ingredients === 'string' ? modalRecipe.ingredients.split('|') : [])).filter(Boolean).map(function(ing, idx) {
-            var ingKey = typeof ing === 'string' ? ing.trim() : JSON.stringify(ing);
+          {Object.entries(modalRecipe.ingredients || {}).map(function(entry, idx) {
+            var ingName = entry[0];
+            var ingAmt = entry[1];
+            var ingKey = ingName.trim();
             var checked = !!selectedIngredients[ingKey];
             return (
               <div key={idx} onClick={function() { setSelectedIngredients(function(prev) { return { ...prev, [ingKey]: !prev[ingKey] }; }); }} style={{ padding: '0.75rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.875rem', cursor: 'pointer', borderBottom: '1px solid #F7FAFB' }} onMouseEnter={function(e) { e.currentTarget.style.background = '#F7FAFB'; }} onMouseLeave={function(e) { e.currentTarget.style.background = ''; }}>
                 <div style={{ width: 22, height: 22, borderRadius: 6, border: '2px solid ' + (checked ? '#1A8BA5' : '#D1E3EA'), background: checked ? '#1A8BA5' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
                   {checked && <span style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 700 }}>✓</span>}
                 </div>
-                <span style={{ fontSize: '0.875rem', color: '#1E2A33' }}>{typeof ing === 'string' ? ing.trim() : ing}</span>
+                <span style={{ fontSize: '0.875rem', color: '#1E2A33' }}>{ingName}{ingAmt ? ': ' + ingAmt : ''}</span>
               </div>
             );
           })}
@@ -955,12 +1140,23 @@ export default function MealPlannerPage() {
         '--border-subtle': darkMode ? '#1A2A3A' : '#F7FAFB',
         '--danger': darkMode ? '#C53050' : '#F43F5E',
         '--success': darkMode ? '#059669' : '#10B981',
-        background: darkMode ? '#0B1D2E' : '#F7FAFB',
+        background: darkMode
+          ? '#0B1D2E'
+          : `url('/images/kitchen-bg.jpg') center/cover no-repeat #F7FAFB`,
         minHeight: '100vh',
         color: darkMode ? '#E8F4F8' : '#1E2A33',
-        transition: 'background 0.25s, color 0.25s'
+        transition: 'background 0.25s, color 0.25s',
+        position: 'relative'
       }}
     >
+      {/* White overlay on background */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: darkMode ? 'transparent' : 'rgba(255,255,255,0.82)',
+        pointerEvents: 'none',
+        zIndex: 0
+      }} />
       {/* Print-only shopping list (visible only during print) */}
       <div style={{ display: 'none' }} className="print-only">
         <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#1E2A33' }}>Shopping List</h1>
@@ -988,17 +1184,37 @@ export default function MealPlannerPage() {
       {navbar}
       {notificationBanner}
       {recipePicker}
+      {cookModeOverlay}
       {ingredientsModal}
       {shoppingListModal}
       {clearConfirm}
       {toast}
       {settingsModal}
       {floatingCart}
-      <div style={{ margin: '0 auto', padding: weekView ? '0' : '0 1.5rem' }}>
-        <div style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
-          {dayTabs}
+
+      {/* Main content area with background */}
+      <div style={{
+        position: 'relative',
+        zIndex: 1,
+        minHeight: '100vh'
+      }}>
+        {/* Framed container */}
+        <div style={{
+          maxWidth: 1160,
+          margin: '0 auto',
+          padding: '40px 48px',
+          minHeight: 'calc(100vh - 64px)',
+          background: darkMode ? '#1A2A3A' : '#ffffff',
+          borderRadius: 20,
+          boxShadow: darkMode
+            ? 'none'
+            : '0 4px 32px rgba(11,29,46,0.10), 0 1px 4px rgba(11,29,46,0.06)',
+        }}>
+          <div style={{ paddingTop: '1.5rem', paddingBottom: '1.5rem' }}>
+            {dayTabs}
+          </div>
+          {weekView ? weekViewJSX : dayViewJSX}
         </div>
-        {weekView ? weekViewJSX : dayViewJSX}
       </div>
     </div>
   );

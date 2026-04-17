@@ -52,6 +52,12 @@ html, body {
 [data-dark="true"] textarea { background: #1A2A3A !important; color: #E8F4F8 !important; border-color: #2A3A4A !important; }
 [data-dark="true"] select option { background: #1A2A3A; color: #E8F4F8; }
 
+/* ── SLIDE-IN ANIMATION ── */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 /* ── PRINT STYLES ── */
 @media print {
   body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
