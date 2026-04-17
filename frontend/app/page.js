@@ -12,19 +12,25 @@ const MEAL_GRADIENTS = {
 };
 const MEAL_ICONS = { Breakfast: '🌅', Lunch: '☀️', Dinner: '🌙', Snacks: '🍿' };
 const INGREDIENT_EMOJIS = {
-  'avocado': '🥑', 'egg': '🥚', 'eggs': '🥚', 'bread': '🍞', 'toast': '🍞', 'sourdough': '🍞',
-  'chicken': '🍗', 'beef': '🥩', 'pork': '🥓', 'salmon': '🐟', 'shrimp': '🦐', 'tuna': '🐟',
-  'cheese': '🧀', 'yogurt': '🥛', 'milk': '🥛', 'cream': '🥛',
-  'rice': '🍚', 'noodles': '🍜', 'pasta': '🍝', 'noodle': '🍜',
-  'tomato': '🍅', 'tomatoes': '🍅', 'onion': '🧅', 'garlic': '🧄', 'pepper': '🫑', 'peppers': '🫑',
-  'carrot': '🥕', 'lettuce': '🥬', 'spinach': '🥬', 'broccoli': '🥦', 'cucumber': '🥒', 'corn': '🌽',
-  'apple': '🍎', 'banana': '🍌', 'orange': '🍊', 'berry': '🫐', 'berries': '🫐', 'strawberry': '🍓', 'lemon': '🍋',
-  'almond': '🌰', 'walnut': '🌰', 'peanut': '🥜', 'nut': '🌰', 'nuts': '🌰',
-  'oil': '🫒', 'butter': '🧈', 'honey': '🍯', 'sauce': '🫕', 'salsa': '🫕',
-  'oat': '🌾', 'oats': '🌾', 'flour': '🌾', 'sugar': '🍬', 'salt': '🧂',
-  'potato': '🥔', 'potatoes': '🥔', 'mushroom': '🍄',
-  'cilantro': '🌿', 'basil': '🌿', 'parsley': '🌿', 'ginger': '🫚',
-  'lime': '🫒', 'lime': '🍋',
+  'avocado': '🥑', 'eggs': '🥚', 'egg': '🥚', 'bread': '🍞', 'toast': '🍞', 'sourdough': '🍞',
+  'chicken': '🍗', 'beef': '🥩', 'pork': '🥓', 'salmon': '🐟', 'shrimp': '🦐', 'tuna': '🐟', 'fish': '🐟',
+  'cheese': '🧀', 'yogurt': '🥛', 'milk': '🥛', 'cream': '🥛', 'butter': '🧈',
+  'rice': '🍚', 'noodles': '🍜', 'pasta': '🍝', 'noodle': '🍜', 'spaghetti': '🍝', 'macaroni': '🍝',
+  'tomato': '🍅', 'tomatoes': '🍅', 'onion': '🧅', 'garlic': '🧄', 'pepper': '🫑', 'peppers': '🫑', 'bell pepper': '🫑',
+  'carrot': '🥕', 'lettuce': '🥬', 'spinach': '🥬', 'broccoli': '🥦', 'cucumber': '🥒', 'corn': '🌽', 'zucchini': '🥒',
+  'apple': '🍎', 'banana': '🍌', 'orange': '🍊', 'berries': '🫐', 'strawberry': '🍓', 'lemon': '🍋', 'lime': '🍋', 'mango': '🥭', 'pineapple': '🍍', 'grape': '🍇', 'grapes': '🍇', 'watermelon': '🍉',
+  'almond': '🌰', 'walnut': '🌰', 'peanut': '🥜', 'nut': '🌰', 'nuts': '🌰', 'pecan': '🌰', 'cashew': '🥜',
+  'oil': '🫒', 'olive oil': '🫒', 'honey': '🍯', 'sauce': '🫕', 'salsa': '🫕', 'soy sauce': '🫕',
+  'oat': '🌾', 'oats': '🌾', 'flour': '🌾', 'sugar': '🍬', 'salt': '🧂', 'pepper': '🧂',
+  'potato': '🥔', 'potatoes': '🥔', 'mushroom': '🍄', 'beans': '🫘', 'chickpeas': '🫘', 'lentils': '🫘',
+  'cilantro': '🌿', 'basil': '🌿', 'parsley': '🌿', 'ginger': '🫚', 'mint': '🌿', 'rosemary': '🌿', 'thyme': '🌿',
+  'bagel': '🥯', 'croissant': '🥐', 'muffin': '🧁', 'chocolate': '🍫', 'cocoa': '🍫',
+  'chickpea': '🫘', 'tofu': '🧈', 'edamame': '🫘',
+  'vinegar': '🍶', 'wine': '🍷', 'broth': '🍲', 'stock': '🍲',
+  'mayonnaise': '🥚', 'mustard': '🟡', 'ketchup': '🍅', 'mayo': '🥚',
+  'wrap': '🌯', 'tortilla': '🌯', 'pita': '🥙',
+  'ham': '🥓', 'bacon': '🥓', 'sausage': '🌭', 'hot dog': '🌭',
+  'granola': '🌾', 'maple': '🍯', 'cinnamon': '🟫', 'vanilla': '🍦', 'yeast': '🧫',
 };
 function getIngredientEmoji(name) {
   var lower = (name || '').toLowerCase();
@@ -581,7 +587,7 @@ export default function MealPlannerPage() {
             <div style={{ flex: '0 0 60%', overflowY: 'auto', borderRight: '1px solid #E8F4F8' }}>
               {/* Hero Image */}
               {(selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl) && (
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', padding: '0.875rem 0.875rem 0', overflow: 'hidden' }}>
                   <img src={selectedRecipe.imageUrl || selectedRecipe.ImageURL || selectedRecipe.ImageUrl} style={{ width: '100%', height: 240, objectFit: 'cover', display: 'block', borderRadius: 12 }} />
                   <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(11,29,46,0.75))', padding: '3rem 1.25rem 1rem' }}>
                     <p style={{ fontWeight: 700, fontSize: '1.5rem', color: '#ffffff', margin: '0 0 0.75rem', lineHeight: 1.2 }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
@@ -599,13 +605,13 @@ export default function MealPlannerPage() {
                   <p style={{ fontWeight: 700, fontSize: '1.5rem', color: '#1E2A33', margin: '0 0 1rem' }}>{selectedRecipe.Name || selectedRecipe.name || 'Unnamed'}</p>
                 </div>
               )}
-              <div style={{ padding: '0 1.5rem 1.5rem' }}>
+              <div style={{ padding: '0.5rem 1.5rem 1.5rem' }}>
                 {/* Add to Meal button */}
-                <button onClick={handleAddRecipe} style={{ width: '100%', padding: '0.875rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer', marginBottom: '0.75rem', boxShadow: '0 2px 8px rgba(26,139,165,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>🔥 Add to {activeMeal}</button>
+                <button onClick={handleAddRecipe} style={{ width: '100%', padding: '0.875rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 12, fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer', marginTop: '0.75rem', marginBottom: '0.875rem', boxShadow: '0 2px 8px rgba(26,139,165,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>🍽️ Add to {activeMeal}</button>
                 {/* Save / Share */}
-                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                  <button onClick={function() { var s = selectedRecipe; var entry = { id: 'my_' + Date.now(), name: s.Name || s.name, imageUrl: s.imageUrl || s.ImageURL || s.ImageUrl || '', calories: s.calories || s.calorie, prepTime: s.prepTime, cookTime: s.cookTime, servings: s.servings, cuisine: s.cuisine, ingredients: s.ingredients, instructions: s.instructions, Notes: s.Notes, source: 'saved' }; var saved = JSON.parse(localStorage.getItem('myRecipes') || '[]'); saved.unshift(entry); localStorage.setItem('myRecipes', JSON.stringify(saved)); showNotify('Saved to My Recipes!'); }} style={{ flex: 1, padding: '0.65rem', background: '#ffffff', color: '#1E2A33', border: '1.5px solid #D1E3EA', borderRadius: 10, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>Save to My Recipes</button>
-                  <button onClick={function() { showNotify('Share feature coming soon!'); }} style={{ flex: 1, padding: '0.65rem', background: '#ffffff', color: '#1E2A33', border: '1.5px solid #D1E3EA', borderRadius: 10, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}>Share with Community</button>
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                  <button onClick={function() { var s = selectedRecipe; var entry = { id: 'my_' + Date.now(), name: s.Name || s.name, imageUrl: s.imageUrl || s.ImageURL || s.ImageUrl || '', calories: s.calories || s.calorie, prepTime: s.prepTime, cookTime: s.cookTime, servings: s.servings, cuisine: s.cuisine, ingredients: s.ingredients, instructions: s.instructions, Notes: s.Notes, source: 'saved' }; var saved = JSON.parse(localStorage.getItem('myRecipes') || '[]'); saved.unshift(entry); localStorage.setItem('myRecipes', JSON.stringify(saved)); showNotify('Saved to My Recipes!'); }} style={{ flex: 1, padding: '0.65rem', background: '#E8F4F8', color: '#1A8BA5', border: '1.5px solid #D1E3EA', borderRadius: 10, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>🔖 Save to My Recipes</button>
+                  <button onClick={function() { showNotify('Share feature coming soon!'); }} style={{ flex: 1, padding: '0.65rem', background: '#E8F4F8', color: '#1A8BA5', border: '1.5px solid #D1E3EA', borderRadius: 10, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>🔗 Share with Community</button>
                 </div>
                 {/* About */}
                 {selectedRecipe.Notes && <div style={{ marginBottom: '1rem' }}><p style={{ fontWeight: 700, fontSize: '0.7rem', color: '#5A7180', marginBottom: '0.375rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>About this recipe</p><p style={{ fontSize: '0.85rem', color: '#1E2A33', lineHeight: 1.6 }}>{selectedRecipe.Notes}</p></div>}
@@ -616,9 +622,9 @@ export default function MealPlannerPage() {
               <p style={{ fontWeight: 700, fontSize: '0.8rem', color: '#1E2A33', margin: '0 0 0.625rem' }}>Ingredients</p>
               {/* Action buttons — at TOP */}
               <div style={{ display: 'flex', gap: '0.375rem', marginBottom: '0.75rem' }}>
-                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var all2 = {}; entries.forEach(function(e) { all2[e[0].trim()] = true; }); setSelectedIngredients(all2); }} style={{ flex: 1, padding: '0.5rem', background: '#ffffff', color: '#1E2A33', border: '1px solid #D1E3EA', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>+ Add All</button>
-                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var sel = {}; entries.forEach(function(e) { if (selectedIngredients[e[0].trim()]) sel[e[0].trim()] = true; }); Object.keys(sel).length > 0 ? openIngredientsModal(selectedRecipe) : showNotify('Check some ingredients first!'); }} style={{ flex: 1, padding: '0.5rem', background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Add Selected</button>
-                <button onClick={function() { setSelectedIngredients({}); }} style={{ flex: 1, padding: '0.5rem', background: '#ffffff', color: '#5A7180', border: '1px solid #D1E3EA', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' }}>Clear Selected</button>
+                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var all2 = {}; entries.forEach(function(e) { all2[e[0].trim()] = true; }); setSelectedIngredients(all2); }} style={{ flex: 1, padding: '0.6rem 0.5rem', background: '#E8F4F8', color: '#1A8BA5', border: '1.5px solid #D1E3EA', borderRadius: 8, fontSize: '0.775rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>+ Add All</button>
+                <button onClick={function() { var entries = Object.entries(selectedRecipe.ingredients || {}); var sel = {}; entries.forEach(function(e) { if (selectedIngredients[e[0].trim()]) sel[e[0].trim()] = true; }); Object.keys(sel).length > 0 ? openIngredientsModal(selectedRecipe) : showNotify('Check some ingredients first!'); }} style={{ flex: 1, padding: '0.6rem 0.5rem', background: '#E8F4F8', color: '#1A8BA5', border: '1.5px solid #D1E3EA', borderRadius: 8, fontSize: '0.775rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem' }}>📋 Add to List</button>
+                <button onClick={function() { setSelectedIngredients({}); }} style={{ flex: 1, padding: '0.6rem 0.5rem', background: '#FEE2E2', color: '#DC2626', border: '1.5px solid #FECACA', borderRadius: 8, fontSize: '0.775rem', fontWeight: 600, cursor: 'pointer' }}>Clear Selected</button>
               </div>
               {/* Ingredient rows */}
               <div style={{ flex: 1, overflowY: 'auto' }}>
