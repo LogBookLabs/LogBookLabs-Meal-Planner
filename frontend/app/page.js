@@ -1008,6 +1008,8 @@ export default function MealPlannerPage() {
           </>
         )}
         <div style={{ width: 2, height: 16, background: 'rgba(255,255,255,0.2)' }} />
+        <a href="/submit-recipe" style={{ background: '#1A8BA5', color: '#ffffff', border: 'none', borderRadius: 8, padding: '0.4rem 0.875rem', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', textDecoration: 'none', flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>＋ Submit Recipe</a>
+        <a href="/admin" style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', border: 'none', borderRadius: 8, padding: '0.4rem 0.875rem', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'none', flexShrink: 0 }}>Admin</a>
         <button onClick={function() { setShowSettings(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: 'rgba(255,255,255,0.6)', padding: '0.25rem', lineHeight: 1, flexShrink: 0 }} title="Settings">⚙️</button>
         <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem' }}>by LogBook Labs</span>
       </div>
@@ -1101,7 +1103,7 @@ export default function MealPlannerPage() {
         </div>
         <div style={{ position: 'relative', minHeight: 140 }}>
           {hasPhoto ? (
-            <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }} onClick={function(e) { e.stopPropagation(); var r = recipes.find(function(x) { return (x.name || x.Name || '') === current; }); if (r) { setTargetWeek('week1'); setActiveMeal(meal); setSelectedRecipe(r); setShowRecipePicker(true); } else { openPicker(activeDay, meal); } }}>
+            <div style={{ position: 'relative', background: '#000' }} onClick={function(e) { e.stopPropagation(); var r = recipes.find(function(x) { return (x.name || x.Name || '') === current; }); if (r) { setTargetWeek('week1'); setActiveMeal(meal); setSelectedRecipe(r); setShowRecipePicker(true); } else { openPicker(activeDay, meal); } }}>
               <img src={imgSrc} alt={current} style={{ width: '100%', height: 140, objectFit: 'cover', display: 'block', borderRadius: 16 }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0.75rem' }}>
                 <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#ffffff', margin: 0, lineHeight: 1.3 }}>{current}</p>
